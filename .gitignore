@@ -1,4 +1,10 @@
 .env
+.env.*
+!.env.example
 ground_truth_notes.json
+node_modules/
+dist/
+coverage/
+.DS_Store
 __pycache__/
 .venv/
