@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./ground_truth_notes.json)",
+      "Read(**/ground_truth_notes.json)",
+      "Edit(./.env)",
+      "Edit(./ground_truth_notes.json)"
+    ]
+  }
+}
