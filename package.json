@@ -1,0 +1,25 @@
+{
+  "name": "testcases-generator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generates test cases and test data from user stories in GitHub Issues, using Claude.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "generate:schema": "tsx scripts/generate-schema.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}
