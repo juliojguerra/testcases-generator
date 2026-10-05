@@ -65,3 +65,5 @@ Agreed while reviewing the bootstrap schema.
 - Small commits.
 - Ask before adding any dependency beyond: `@anthropic-ai/sdk`, `zod`, `typescript`, `vitest`, `tsx`, `@types/node` (types only, kept on the same major as Node).
 - Briefly explain design choices as we go (the user is a senior SDET learning AI engineering).
+- Before opening a PR, run the `code-reviewer` subagent (`.claude/agents/code-reviewer.md`, read-only) on the branch and address its blocking findings. It supplements the user's own review, it doesn't replace it.
+- The "no agents or subagents" rule in the staged plan is about the generator's architecture. Development tooling such as `code-reviewer` is allowed and never ships in the generator.
