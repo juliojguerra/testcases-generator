@@ -106,6 +106,11 @@ describe("readiness invariants (Zod-only)", () => {
     );
   });
 
+  it.each(["needs_clarification", "insufficient_information"])("rejects '%s' without open questions", (readiness) => {
+    const result = parse({ readiness, open_questions: [] });
+    expect(messages(result)).toContain(`readiness is '${readiness}' but open_questions is empty`);
+  });
+
   it("rejects assumption cases when 'ready'", () => {
     const result = parse({ assumptions: ["Locale is en-US"], test_cases: [criterionCase, assumptionCase] });
     expect(messages(result)).toContain("readiness is 'ready' but some test cases are assumptions");
@@ -114,6 +119,7 @@ describe("readiness invariants (Zod-only)", () => {
   it("accepts assumption cases when not 'ready' and assumptions are listed", () => {
     const result = parse({
       readiness: "needs_clarification",
+      open_questions: ["Which locale should be used?"],
       assumptions: ["Locale is en-US"],
       test_cases: [criterionCase, assumptionCase],
     });
