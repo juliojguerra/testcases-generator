@@ -1,66 +1,66 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "TestCaseOutput",
-  "description": "Test cases generated for one GitHub issue. Bootstrap version: will be replaced by a file generated from the Zod schema.",
   "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "issue",
-    "ticket_type",
-    "readiness",
-    "open_questions",
-    "assumptions",
-    "test_cases"
-  ],
   "properties": {
     "issue": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["number", "title"],
       "properties": {
-        "number": { "type": "integer" },
-        "title": { "type": "string" }
-      }
+        "number": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "number",
+        "title"
+      ],
+      "additionalProperties": false
     },
     "ticket_type": {
       "type": "string",
-      "enum": ["feature", "bug_report", "task"]
+      "enum": [
+        "feature",
+        "bug_report",
+        "task"
+      ]
     },
     "readiness": {
       "type": "string",
-      "enum": ["ready", "needs_clarification", "insufficient_information"]
+      "enum": [
+        "ready",
+        "needs_clarification",
+        "insufficient_information"
+      ]
     },
     "open_questions": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "assumptions": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "test_cases": {
       "type": "array",
       "items": {
         "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "id",
-          "title",
-          "type",
-          "priority",
-          "preconditions",
-          "steps",
-          "expected_result",
-          "test_data",
-          "traces_to"
-        ],
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique within the issue, e.g. TC-001.",
-            "pattern": "^TC-\\d{3}$"
+            "pattern": "^TC-\\d{3}$",
+            "description": "Unique within the issue, e.g. TC-001."
           },
-          "title": { "type": "string" },
+          "title": {
+            "type": "string"
+          },
           "type": {
             "type": "string",
             "enum": [
@@ -75,36 +75,115 @@
           },
           "priority": {
             "type": "string",
-            "enum": ["high", "medium", "low"]
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
           },
           "preconditions": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
           "steps": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
-          "expected_result": { "type": "string" },
+          "expected_result": {
+            "type": "string"
+          },
           "test_data": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
-              "required": ["field", "value", "rationale"],
               "properties": {
-                "field": { "type": "string" },
-                "value": {},
-                "rationale": { "type": "string" }
-              }
+                "field": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "field",
+                "value",
+                "rationale"
+              ],
+              "additionalProperties": false
             }
           },
           "traces_to": {
-            "type": "string",
-            "description": "Verbatim quote or short paraphrase of the acceptance criterion covered, or the literal string \"assumption\"."
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "criterion"
+                  },
+                  "quote": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Verbatim quote from the ticket of the acceptance criterion this test case covers."
+                  }
+                },
+                "required": [
+                  "kind",
+                  "quote"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "assumption"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              }
+            ]
           }
-        }
+        },
+        "required": [
+          "id",
+          "title",
+          "type",
+          "priority",
+          "preconditions",
+          "steps",
+          "expected_result",
+          "test_data",
+          "traces_to"
+        ],
+        "additionalProperties": false
       }
     }
-  }
+  },
+  "required": [
+    "issue",
+    "ticket_type",
+    "readiness",
+    "open_questions",
+    "assumptions",
+    "test_cases"
+  ],
+  "additionalProperties": false,
+  "description": "Test cases generated for one GitHub issue."
 }

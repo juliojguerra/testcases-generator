@@ -21,7 +21,7 @@ Known Stage 1 limit: one call per issue cannot see other issues, so it cannot de
 
 ## Stack and conventions
 
-- TypeScript on Node (>= 20.6), `strict` mode.
+- TypeScript on Node (>= 24, the current LTS; `.nvmrc` pins it), `strict` mode.
 - Official Anthropic TypeScript SDK (`@anthropic-ai/sdk`), Messages API.
 - Zod 4 validates all model output. **Zod is the single source of truth**: `schemas/test_case_output.schema.json` is generated from it with `z.toJSONSchema()` (script in `scripts/`), and a Vitest test fails if the committed file drifts from the generated one. Never hand-edit the JSON file once the generator exists.
 - Source in `src/`. Tests with Vitest. Scripts run with `tsx`.
@@ -63,5 +63,5 @@ Agreed while reviewing the bootstrap schema.
 
 - Propose a plan before coding and wait for approval.
 - Small commits.
-- Ask before adding any dependency beyond: `@anthropic-ai/sdk`, `zod`, `typescript`, `vitest`, `tsx`.
+- Ask before adding any dependency beyond: `@anthropic-ai/sdk`, `zod`, `typescript`, `vitest`, `tsx`, `@types/node` (types only, kept on the same major as Node).
 - Briefly explain design choices as we go (the user is a senior SDET learning AI engineering).
