@@ -70,6 +70,7 @@ describe("shape", () => {
     expect(
       parse({
         readiness: "needs_clarification",
+        open_questions: ["q"],
         assumptions: ["a"],
         test_cases: [{ ...criterionCase, traces_to: { kind: "assumption", quote: "x" } }],
       }).success,
@@ -106,6 +107,12 @@ describe("readiness invariants (Zod-only)", () => {
     );
   });
 
+  it.each(["needs_clarification", "insufficient_information"])("rejects '%s' without open questions", (readiness) => {
+    const result = parse({ readiness, open_questions: [] });
+    expect(messages(result)).toContain(`readiness is '${readiness}' but open_questions is empty`);
+    expect(!result.success && result.error.issues.map((i) => i.path.join("."))).toContain("open_questions");
+  });
+
   it("rejects assumption cases when 'ready'", () => {
     const result = parse({ assumptions: ["Locale is en-US"], test_cases: [criterionCase, assumptionCase] });
     expect(messages(result)).toContain("readiness is 'ready' but some test cases are assumptions");
@@ -114,6 +121,7 @@ describe("readiness invariants (Zod-only)", () => {
   it("accepts assumption cases when not 'ready' and assumptions are listed", () => {
     const result = parse({
       readiness: "needs_clarification",
+      open_questions: ["Which locale should be used?"],
       assumptions: ["Locale is en-US"],
       test_cases: [criterionCase, assumptionCase],
     });
@@ -121,7 +129,11 @@ describe("readiness invariants (Zod-only)", () => {
   });
 
   it("rejects assumption cases with an empty assumptions list", () => {
-    const result = parse({ readiness: "needs_clarification", test_cases: [assumptionCase] });
+    const result = parse({
+      readiness: "needs_clarification",
+      open_questions: ["q"],
+      test_cases: [assumptionCase],
+    });
     expect(messages(result)).toContain("test cases are marked as assumptions but the assumptions list is empty");
   });
 });

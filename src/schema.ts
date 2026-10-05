@@ -15,7 +15,7 @@ export const PRIORITIES = ["high", "medium", "low"] as const;
 
 // A discriminated union on `kind` so the "criterion needs a quote" rule shows up in the
 // generated JSON Schema. That `quote` is a verbatim substring of the ticket cannot be
-// checked here (the schema never sees the ticket); the Phase 3 evals check it.
+// checked here (the schema never sees the ticket); the evals check it.
 export const TraceSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     kind: z.literal("criterion"),
@@ -73,6 +73,14 @@ export const TestCaseOutputSchema = z
         code: "custom",
         path: ["open_questions"],
         message: "readiness is 'ready' but open_questions is not empty",
+      });
+    }
+
+    if (output.readiness !== "ready" && output.open_questions.length === 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["open_questions"],
+        message: `readiness is '${output.readiness}' but open_questions is empty`,
       });
     }
 
